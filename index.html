@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Punch Minigolf</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punch Restaurang & Minigolf - Scorekort</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div class="page" id="start-page">
+    <img src="logo.png" alt="Punch Restaurang & Minigolf Logga" class="logo">
+    <h1>Välkommen till Punch Restaurang & Minigolf</h1>
+    <label for="team-name">Lagnamn:</label>
+    <input type="text" id="team-name" placeholder="Ange lagnamn">
+    <button onclick="goToPlayerCount()">Gå vidare</button>
+  </div>
+
+  <!-- Sidorna för antal spelare, spelarnamn och scorekort -->
+  <div class="page" id="player-count-page" style="display:none;">
+    <!-- Fyll här -->
+  </div>
+
+  <div class="page" id="player-names-page" style="display:none;">
+    <!-- Fyll här -->
+  </div>
+
+  <div class="page" id="scorecard-page" style="display:none;">
+    <!-- Fyll här -->
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
