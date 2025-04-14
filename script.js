@@ -1,109 +1,151 @@
-let players = []; // Array för att lagra spelarnamn och slag
-let holes = 12; // Antal hål
+let players = [];
+let teamName = "";
+const holes = 12;
 
-// Byt sida och visa den angivna sidan
 function showPage(pageId) {
-  // Dölj alla sidor
-  const pages = document.querySelectorAll('.page');
-  pages.forEach(page => {
+  document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
   });
-  // Visa den valda sidan
   document.getElementById(pageId).style.display = 'block';
 }
 
-// Funktion för att gå till sidan där antal spelare väljs
 function goToPlayerCount() {
-  const teamName = document.getElementById('team-name').value.trim();
-  if (teamName === "") {
-    alert("Fyll i ett lagnamn för att fortsätta.");
+  const input = document.getElementById('team-name');
+  if (!input.value.trim()) {
+    alert("Ange ett lagnamn.");
     return;
   }
+  teamName = input.value.trim();
   showPage('player-count-page');
 }
 
-// Funktion för att gå till sidan där spelarnamn fylls i
 function goToPlayerNames() {
-  const playerCount = parseInt(document.getElementById('player-count').value);
-  players = [];
-  for (let i = 0; i < playerCount; i++) {
-    const playerName = prompt(`Ange namn för Spelare ${i + 1}`);
-    players.push(playerName);
-  }
+  const count = parseInt(document.getElementById('player-count').value);
+  players = new Array(count).fill("");
   showPage('player-names-page');
-  generatePlayerNameInputs();
+  generatePlayerInputs();
 }
 
-// Generera inputfält för spelarnamn
-function generatePlayerNameInputs() {
+function generatePlayerInputs() {
   const container = document.getElementById('player-names');
-  container.innerHTML = ''; // Rensa tidigare inputs
-  players.forEach((player, index) => {
+  container.innerHTML = "";
+  players.forEach((_, index) => {
     const label = document.createElement('label');
     label.textContent = `Spelare ${index + 1}:`;
     const input = document.createElement('input');
     input.type = 'text';
-    input.placeholder = `Ange namn för ${player}`;
+    input.placeholder = "Ange namn";
+    input.oninput = () => {
+      players[index] = input.value;
+    };
     container.appendChild(label);
+    container.appendChild(document.createElement('br'));
     container.appendChild(input);
     container.appendChild(document.createElement('br'));
   });
 }
 
-// Funktion för att starta spelet och visa scorekortet
 function startGame() {
-  const playerInputs = document.querySelectorAll('#player-names input');
-  playerInputs.forEach((input, index) => {
-    players[index] = input.value.trim() || players[index];
-  });
-
   showPage('scorecard-page');
   generateScorecard();
 }
 
-// Skapa scorekortet dynamiskt baserat på antal spelare
 function generateScorecard() {
-  const tbody = document.getElementById('scorecard-container');
-  tbody.innerHTML = ''; // Rensa tidigare scorekort
+  const container = document.getElementById('scorecard-container');
+  container.innerHTML = "";
 
-  let scorecardHtml = '<table class="scorecard"><thead><tr><th>Hål</th>';
-  players.forEach((player, index) => {
-    scorecardHtml += `<th>${player}</th>`;
+  const table = document.createElement('table');
+  table.className = 'scorecard';
+
+  // Header
+  const headerRow = document.createElement('tr');
+  const holeHeader = document.createElement('th');
+  holeHeader.textContent = "Hål";
+  headerRow.appendChild(holeHeader);
+
+  players.forEach(player => {
+    const th = document.createElement('th');
+    th.textContent = player || "Spelare";
+    headerRow.appendChild(th);
   });
-  scorecardHtml += '<th>Totalt</th></tr></thead><tbody>';
 
-  for (let hole = 1; hole <= holes; hole++) {
-    scorecardHtml += `<tr><td>Hål ${hole}</td>`;
-    players.forEach(() => {
-      scorecardHtml += `<td><input type="number" min="1" max="9" placeholder="Slag" oninput="updateTotal(${hole})"></td>`;
+  const teamTotalHeader = document.createElement('th');
+  teamTotalHeader.textContent = teamName;
+  headerRow.appendChild(teamTotalHeader);
+
+  table.appendChild(headerRow);
+
+  // Hål-rader
+  for (let h = 1; h <= holes; h++) {
+    const row = document.createElement('tr');
+    const holeCell = document.createElement('td');
+    holeCell.textContent = `Hål ${h}`;
+    row.appendChild(holeCell);
+
+    let rowTotal = 0;
+
+    players.forEach((_, pIndex) => {
+      const cell = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = '1';
+      input.max = '9';
+      input.placeholder = '-';
+      input.oninput = () => {
+        if (parseInt(input.value) > 9) {
+          alert("Högst 9 slag per hål, har du mer än så bör du träna lite..");
+          input.value = '';
+          return;
+        }
+        updateTeamTotal();
+      };
+      cell.appendChild(input);
+      row.appendChild(cell);
     });
-    scorecardHtml += `<td class="total" id="total-hole-${hole}">0</td></tr>`;
+
+    const totalCell = document.createElement('td');
+    totalCell.className = 'hole-total';
+    totalCell.textContent = '0';
+    row.appendChild(totalCell);
+
+    table.appendChild(row);
   }
 
-  scorecardHtml += '</tbody></table>';
-  tbody.innerHTML = scorecardHtml;
-}
+  // Lagets totalrad
+  const totalRow = document.createElement('tr');
+  const totalLabelCell = document.createElement('td');
+  totalLabelCell.textContent = "Slutresultat";
+  totalRow.appendChild(totalLabelCell);
 
-// Uppdatera totalslag per hål
-function updateTotal(hole) {
-  let total = 0;
-  const inputs = document.querySelectorAll(`tr:nth-child(${hole + 1}) input`);
-  inputs.forEach(input => {
-    if (input.value) {
-      total += parseInt(input.value);
-    }
+  players.forEach((_, index) => {
+    const cell = document.createElement('td');
+    cell.id = `player-total-${index}`;
+    cell.textContent = '0';
+    totalRow.appendChild(cell);
   });
-  document.getElementById(`total-hole-${hole}`).innerText = total;
 
-  // Uppdatera lagets totala poäng
-  updateTeamTotal();
+  const teamTotalCell = document.createElement('td');
+  teamTotalCell.id = 'team-total';
+  teamTotalCell.textContent = '0';
+  totalRow.appendChild(teamTotalCell);
+
+  table.appendChild(totalRow);
+
+  container.appendChild(table);
 }
 
-// Uppdatera lagets totala poäng
 function updateTeamTotal() {
-  let totalScore = 0;
-  for (let hole = 1; hole <= holes; hole++) {
-    totalScore += parseInt(document.getElementById(`total-hole-${hole}`).innerText) || 0;
-  }
-  document.getElementById('team-total').innerText = totalScore;
+  let teamTotal = 0;
+
+  players.forEach((_, pIndex) => {
+    let playerTotal = 0;
+    const inputs = document.querySelectorAll(`.scorecard tr td:nth-child(${pIndex + 2}) input`);
+    inputs.forEach(input => {
+      if (input.value) playerTotal += parseInt(input.value);
+    });
+    document.getElementById(`player-total-${pIndex}`).textContent = playerTotal;
+    teamTotal += playerTotal;
+  });
+
+  document.getElementById('team-total').textContent = teamTotal;
 }
