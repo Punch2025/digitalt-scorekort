@@ -1,62 +1,35 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Punch Restaurang & Minigolf - Scorekort</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minigolf Scorekort</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- SIDA 1: Lagnamn -->
-  <div class="page" id="team-name-page">
-    <div class="header">
-      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
-    </div>
-    <h1>Välkommen till Punch Restaurang & Minigolf</h1>
-    <label for="team-name">Lagnamn:</label>
-    <input type="text" id="team-name" placeholder="Ange lagnamn"/>
-    <button onclick="goToPlayerCount()">Gå vidare</button>
+  <img src="images/logo.png" alt="Logotyp" class="logo center-logo" />
+  
+  <!-- Din innehåll för första sidan -->
+  <div class="page" id="page1">
+    <h2>Välkommen till Punch Restaurang & Minigolf</h2>
+    <label for="teamName">Lagnamn:</label>
+    <input type="text" id="teamName" placeholder="Ange lagnamn" />
+    <button id="goToPage2">Gå vidare</button>
   </div>
 
-  <!-- SIDA 2: Antal spelare -->
-  <div class="page" id="player-count-page" style="display: none;">
-    <div class="header">
-      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
-    </div>
+  <!-- Din innehåll för andra sidan -->
+  <div class="page" id="page2" style="display: none;">
     <h2>Hur många spelar?</h2>
-    <select id="player-count">
-      <option value="1">1 spelare</option>
-      <option value="2">2 spelare</option>
-      <option value="3">3 spelare</option>
-      <option value="4">4 spelare</option>
-      <option value="5">5 spelare</option>
-      <option value="6">6 spelare</option>
-    </select>
-    <button onclick="goToPlayerNames()">Gå vidare</button>
+    <label for="numPlayers">Välj antal spelare (1-6):</label>
+    <input type="number" id="numPlayers" min="1" max="6" />
+    <button id="goToPage3">Gå vidare</button>
   </div>
 
-  <!-- SIDA 3: Spelarnamn -->
-  <div class="page" id="player-names-page" style="display: none;">
-    <div class="header">
-      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
-    </div>
-    <h2>Ange spelarnamn</h2>
-    <div id="player-names"></div>
-    <button onclick="startGame()">Starta spel</button>
-  </div>
-
-  <!-- SIDA 4: Scorekort -->
-  <div class="page" id="scorecard-page" style="display: none;">
-    <div class="header">
-      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
-    </div>
-    <div id="scorecard-container"></div>
-    <div class="banner">
-      <p>
-        Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!
-      </p>
-    </div>
+  <!-- Din innehåll för tredje sidan -->
+  <div class="page" id="page3" style="display: none;">
+    <h2>Fyll i spelarnamn</h2>
+    <!-- Formulär för spelarnamn -->
+    <button id="startGame">Starta Spel</button>
   </div>
 
   <script src="script.js"></script>
