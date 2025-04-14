@@ -192,5 +192,7 @@ function updateTotals() {
   }
 }
 
-// Starta på första sidan
-showPage('start-page');
+// Vänta tills HTML är redo
+document.addEventListener('DOMContentLoaded', () => {
+  showPage('start-page');
+});
