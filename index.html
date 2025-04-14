@@ -15,17 +15,28 @@
     <button onclick="goToPlayerCount()">Gå vidare</button>
   </div>
 
-  <!-- Sidorna för antal spelare, spelarnamn och scorekort -->
   <div class="page" id="player-count-page" style="display:none;">
-    <!-- Fyll här -->
+    <h2>Hur många spelar?</h2>
+    <select id="player-count">
+      <option value="1">1 spelare</option>
+      <option value="2">2 spelare</option>
+      <option value="3">3 spelare</option>
+      <option value="4">4 spelare</option>
+      <option value="5">5 spelare</option>
+      <option value="6">6 spelare</option>
+    </select>
+    <button onclick="goToPlayerNames()">Gå vidare</button>
   </div>
 
   <div class="page" id="player-names-page" style="display:none;">
-    <!-- Fyll här -->
+    <h2>Ange spelarnamn</h2>
+    <div id="player-names"></div>
+    <button onclick="startGame()">Starta Spel</button>
   </div>
 
   <div class="page" id="scorecard-page" style="display:none;">
-    <!-- Fyll här -->
+    <!-- Här kommer scorekortet att visas -->
+    <div id="scorecard-container"></div>
   </div>
 
   <script src="script.js"></script>
