@@ -7,34 +7,41 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="scorecard-page">
+  <!-- Första sidan: Ange lagnamn -->
+  <div class="page" id="team-name-page">
     <div class="header">
       <img src="logo.png" alt="Punch Restaurang & Minigolf Logga" class="logo">
     </div>
     <h1>Välkommen till Punch Restaurang & Minigolf</h1>
+    <label for="team-name">Lagnamn:</label>
+    <input type="text" id="team-name" placeholder="Ange lagnamn">
+    <button onclick="goToPlayerCount()">Gå vidare</button>
+  </div>
 
-    <!-- Scorekort -->
-    <div class="scorecard-container">
-      <table class="scorecard">
-        <thead>
-          <tr>
-            <th>Hål</th>
-            <th>Spelare 1</th>
-            <th>Spelare 2</th>
-            <th>Spelare 3</th>
-            <th>Spelare 4</th>
-            <th>Spelare 5</th>
-            <th>Spelare 6</th>
-            <th>Totalt</th>
-          </tr>
-        </thead>
-        <tbody id="scorecard-body">
-          <!-- Hål 1 till 12 genereras här -->
-        </tbody>
-      </table>
-    </div>
-    
-    <!-- Banner längst ner -->
+  <!-- Andra sidan: Välj antal spelare -->
+  <div class="page" id="player-count-page" style="display:none;">
+    <h2>Hur många spelar?</h2>
+    <select id="player-count">
+      <option value="1">1 spelare</option>
+      <option value="2">2 spelare</option>
+      <option value="3">3 spelare</option>
+      <option value="4">4 spelare</option>
+      <option value="5">5 spelare</option>
+      <option value="6">6 spelare</option>
+    </select>
+    <button onclick="goToPlayerNames()">Gå vidare</button>
+  </div>
+
+  <!-- Tredje sidan: Fyll i spelarnamn -->
+  <div class="page" id="player-names-page" style="display:none;">
+    <h2>Ange spelarnamn</h2>
+    <div id="player-names"></div>
+    <button onclick="startGame()">Starta Spel</button>
+  </div>
+
+  <!-- Scorekort -->
+  <div class="page" id="scorecard-page" style="display:none;">
+    <div id="scorecard-container"></div>
     <div class="banner">
       <p>Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!</p>
     </div>
