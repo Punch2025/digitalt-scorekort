@@ -45,12 +45,12 @@ button:hover {
 
 .scorecard-wrapper {
   overflow-x: auto;
+  margin-top: 20px;
 }
 
 .scorecard {
-  width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin: 0 auto;
   font-size: 14px;
 }
 
@@ -59,7 +59,6 @@ button:hover {
   border: 1px solid #000;
   padding: 8px;
   text-align: center;
-  min-width: 50px;
 }
 
 .scorecard input {
@@ -69,6 +68,22 @@ button:hover {
   text-align: center;
   border: none;
   background-color: #fefefe;
+}
+
+.vertical-scorecard thead tr {
+  display: flex;
+  flex-direction: column;
+}
+
+.vertical-scorecard tbody tr {
+  display: flex;
+  flex-direction: column;
+}
+
+.vertical-scorecard th,
+.vertical-scorecard td {
+  min-width: 120px;
+  display: block;
 }
 
 .team-total {
@@ -106,4 +121,9 @@ button:hover {
     width: 100%;
     box-sizing: border-box;
   }
+}
+
+.scorecard-logo {
+  max-width: 150px;
+  margin-bottom: 10px;
 }
