@@ -1,48 +1,52 @@
-const app = document.getElementById('app');
 let teamName = '';
 let playerCount = 1;
 let playerNames = [];
 let scores = [];
 
+const app = document.getElementById('app');
+
 function renderTeamInput() {
   app.innerHTML = `
     <div class="container">
-      <img src="logo.png" alt="Logotyp" class="logo"/>
+      <img src="logo.png" alt="Punch Restaurang & Minigolf" class="logo" />
       <h1>Välkommen till Punch Restaurang & Minigolf</h1>
-      <input type="text" id="teamName" placeholder="Ange lagnamn"/>
-      <br>
-      <button onclick="handleTeamName()">Nästa</button>
+      <input type="text" id="team-name" placeholder="Ange lagnamn" />
+      <button onclick="submitTeamName()">Fortsätt</button>
     </div>
   `;
 }
 
-function handleTeamName() {
-  const input = document.getElementById('teamName');
-  if (input.value.trim() === '') {
-    alert('Ange ett lagnamn');
+function submitTeamName() {
+  const input = document.getElementById('team-name');
+  teamName = input.value.trim();
+  if (!teamName) {
+    alert('Ange ett lagnamn för att fortsätta.');
     return;
   }
-  teamName = input.value.trim();
   renderPlayerCount();
 }
 
 function renderPlayerCount() {
   app.innerHTML = `
     <div class="container">
-      <h2>Lagnamn: ${teamName}</h2>
-      <label for="playerSelect">Hur många spelar?</label><br>
-      <select id="playerSelect">
-        ${[1, 2, 3, 4, 5, 6].map(n => `<option value="${n}">${n}</option>`).join('')}
-      </select><br>
-      <button onclick="handlePlayerCount()">Nästa</button>
+      <h2>Hur många spelar?</h2>
+      <input type="number" id="player-count" min="1" max="6" value="1" />
+      <button onclick="submitPlayerCount()">Fortsätt</button>
     </div>
   `;
 }
 
-function handlePlayerCount() {
-  const select = document.getElementById('playerSelect');
-  playerCount = parseInt(select.value);
+function submitPlayerCount() {
+  const input = document.getElementById('player-count');
+  const count = parseInt(input.value);
+  if (isNaN(count) || count < 1 || count > 6) {
+    alert('Ange ett giltigt antal spelare (1–6).');
+    return;
+  }
+  playerCount = count;
   renderPlayerNames();
+}
+
 function renderPlayerNames() {
   playerNames = new Array(playerCount).fill('');
   app.innerHTML = `
@@ -62,9 +66,7 @@ function startGame() {
     return nameInput.value.trim() || `Spelare ${i + 1}`;
   });
 
-  // Initiera tomma score-array
   scores = playerNames.map(() => new Array(12).fill(''));
-
   renderScorecard();
 }
 
@@ -154,4 +156,5 @@ function removePlayer() {
   renderScorecard();
 }
 
+// Starta applikationen
 renderTeamInput();
