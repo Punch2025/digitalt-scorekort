@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Punch Restaurang & Minigolf - Scorekort</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- Första sidan: Ange lagnamn -->
+
+  <!-- SIDA 1: Lagnamn -->
   <div class="page" id="team-name-page">
     <div class="header">
-      <img src="logo.png" alt="Punch Restaurang & Minigolf Logga" class="logo">
+      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
     </div>
     <h1>Välkommen till Punch Restaurang & Minigolf</h1>
     <label for="team-name">Lagnamn:</label>
-    <input type="text" id="team-name" placeholder="Ange lagnamn">
+    <input type="text" id="team-name" placeholder="Ange lagnamn"/>
     <button onclick="goToPlayerCount()">Gå vidare</button>
   </div>
 
-  <!-- Andra sidan: Välj antal spelare -->
-  <div class="page" id="player-count-page" style="display:none;">
+  <!-- SIDA 2: Antal spelare -->
+  <div class="page" id="player-count-page" style="display: none;">
+    <div class="header">
+      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
+    </div>
     <h2>Hur många spelar?</h2>
     <select id="player-count">
       <option value="1">1 spelare</option>
@@ -32,18 +36,26 @@
     <button onclick="goToPlayerNames()">Gå vidare</button>
   </div>
 
-  <!-- Tredje sidan: Fyll i spelarnamn -->
-  <div class="page" id="player-names-page" style="display:none;">
+  <!-- SIDA 3: Spelarnamn -->
+  <div class="page" id="player-names-page" style="display: none;">
+    <div class="header">
+      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
+    </div>
     <h2>Ange spelarnamn</h2>
     <div id="player-names"></div>
-    <button onclick="startGame()">Starta Spel</button>
+    <button onclick="startGame()">Starta spel</button>
   </div>
 
-  <!-- Scorekort -->
-  <div class="page" id="scorecard-page" style="display:none;">
+  <!-- SIDA 4: Scorekort -->
+  <div class="page" id="scorecard-page" style="display: none;">
+    <div class="header">
+      <img src="logo.png" alt="Logotyp" class="logo center-logo" />
+    </div>
     <div id="scorecard-container"></div>
     <div class="banner">
-      <p>Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!</p>
+      <p>
+        Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!
+      </p>
     </div>
   </div>
 
