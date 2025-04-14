@@ -61,7 +61,7 @@ function generateScorecard() {
 
   // Logotyp överst på scorekortet
   const logoImg = document.createElement('img');
-  logoImg.src = "logo.png"; // Byt namn om din logga heter något annat
+  logoImg.src = "logo.png";
   logoImg.alt = "Punch Restaurang & Minigolf Logga";
   logoImg.className = "scorecard-logo";
   container.appendChild(logoImg);
@@ -69,31 +69,32 @@ function generateScorecard() {
   const table = document.createElement('table');
   table.className = 'scorecard vertical-scorecard';
 
+  // Första raden: Spelarnamn
   const headerRow = document.createElement('tr');
-  const nameHeader = document.createElement('th');
-  nameHeader.textContent = "Hål";
-  headerRow.appendChild(nameHeader);
+  const corner = document.createElement('th');
+  corner.textContent = "Hål";
+  headerRow.appendChild(corner);
 
-  for (let i = 0; i < playerCount; i++) {
+  for (let hole = 0; hole < 12; hole++) {
     const th = document.createElement('th');
-    th.textContent = playerNames[i];
+    th.textContent = `Hål ${hole + 1}`;
     headerRow.appendChild(th);
   }
 
-  const teamCol = document.createElement('th');
-  teamCol.textContent = teamName;
-  headerRow.appendChild(teamCol);
+  const teamHeader = document.createElement('th');
+  teamHeader.textContent = teamName;
+  headerRow.appendChild(teamHeader);
+
   table.appendChild(headerRow);
 
-  for (let hole = 0; hole < 12; hole++) {
+  // Spelarnas rader
+  for (let player = 0; player < playerCount; player++) {
     const row = document.createElement('tr');
-    const holeNumber = document.createElement('td');
-    holeNumber.textContent = `Hål ${hole + 1}`;
-    row.appendChild(holeNumber);
+    const nameCell = document.createElement('td');
+    nameCell.textContent = playerNames[player];
+    row.appendChild(nameCell);
 
-    let teamTotalForHole = 0;
-
-    for (let player = 0; player < playerCount; player++) {
+    for (let hole = 0; hole < 12; hole++) {
       const td = document.createElement('td');
       const input = document.createElement('input');
       input.type = 'number';
@@ -113,32 +114,36 @@ function generateScorecard() {
       });
       td.appendChild(input);
       row.appendChild(td);
-      teamTotalForHole += 1;
     }
 
-    const teamTotalCell = document.createElement('td');
-    teamTotalCell.textContent = teamTotalForHole;
-    row.appendChild(teamTotalCell);
+    const totalCell = document.createElement('td');
+    totalCell.id = `total-${player}`;
+    totalCell.textContent = 12;
+    row.appendChild(totalCell);
+
     table.appendChild(row);
   }
 
+  // Slutresultat-rad
   const totalRow = document.createElement('tr');
-  const totalLabel = document.createElement('td');
-  totalLabel.textContent = "Slutresultat";
-  totalRow.appendChild(totalLabel);
+  const label = document.createElement('td');
+  label.textContent = "Slutresultat";
+  totalRow.appendChild(label);
 
-  let teamTotal = 0;
-  for (let player = 0; player < playerCount; player++) {
+  for (let hole = 0; hole < 12; hole++) {
     const td = document.createElement('td');
-    td.id = `total-${player}`;
-    td.textContent = 12;
+    let holeTotal = 0;
+    for (let player = 0; player < playerCount; player++) {
+      holeTotal += scores[player][hole];
+    }
+    td.id = `hole-total-${hole}`;
+    td.textContent = holeTotal;
     totalRow.appendChild(td);
-    teamTotal += 12;
   }
 
   const teamTotalTd = document.createElement('td');
   teamTotalTd.id = 'team-total';
-  teamTotalTd.textContent = teamTotal;
+  teamTotalTd.textContent = playerCount * 12;
   totalRow.appendChild(teamTotalTd);
 
   table.appendChild(totalRow);
@@ -177,6 +182,14 @@ function updateTotals() {
     teamSum += sum;
   }
   document.getElementById('team-total').textContent = teamSum;
+
+  for (let hole = 0; hole < 12; hole++) {
+    let total = 0;
+    for (let player = 0; player < playerCount; player++) {
+      total += scores[player][hole];
+    }
+    document.getElementById(`hole-total-${hole}`).textContent = total;
+  }
 }
 
 // Starta på första sidan
