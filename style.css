@@ -1,129 +1,71 @@
+/* Basstil för hela sidan */
 body {
-  background-color: white;
-  color: black;
-  font-family: 'American Typewriter', serif;
+  font-family: 'American Typewriter', monospace;
+  background-color: #fff;
   margin: 0;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
+.scorecard-page {
+  width: 90%;
+  max-width: 800px;
   padding: 20px;
   text-align: center;
 }
 
 .logo {
-  max-width: 200px;
-  height: auto;
-  margin-bottom: 20px;
+  width: 150px; /* Justera storleken på loggan */
+  margin: 20px auto;
 }
 
-input[type="text"],
-input[type="number"] {
-  padding: 8px;
-  font-size: 16px;
-  width: 200px;
-  margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+h1 {
+  font-size: 24px;
+  margin-top: 10px;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin: 10px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #e0e0e0;
-}
-
-.scorecard-wrapper {
+.scorecard-container {
+  margin-top: 30px;
   overflow-x: auto;
-  margin-top: 20px;
 }
 
 .scorecard {
+  width: 100%;
   border-collapse: collapse;
-  margin: 0 auto;
-  font-size: 14px;
+  margin-top: 20px;
 }
 
 .scorecard th,
 .scorecard td {
+  padding: 10px;
   border: 1px solid #000;
-  padding: 8px;
   text-align: center;
 }
 
-.scorecard input {
-  width: 40px;
-  padding: 5px;
-  font-size: 14px;
-  text-align: center;
-  border: none;
-  background-color: #fefefe;
-}
-
-.vertical-scorecard thead tr {
-  display: flex;
-  flex-direction: column;
-}
-
-.vertical-scorecard tbody tr {
-  display: flex;
-  flex-direction: column;
-}
-
-.vertical-scorecard th,
-.vertical-scorecard td {
-  min-width: 120px;
-  display: block;
-}
-
-.team-total {
-  margin-top: 20px;
-  font-size: 18px;
+.scorecard th {
+  background-color: #f4f4f4;
   font-weight: bold;
 }
 
-.controls {
-  margin-top: 20px;
-}
-
-.banner {
-  margin-top: 40px;
-  padding: 15px;
-  background-color: #eee;
-  font-style: italic;
-  border-top: 2px solid #ccc;
+input[type="number"] {
+  width: 50px;
+  padding: 5px;
+  text-align: center;
   font-size: 14px;
 }
 
-@media (max-width: 600px) {
-  .scorecard th,
-  .scorecard td {
-    padding: 4px;
-    font-size: 12px;
-  }
-
-  input[type="text"],
-  input[type="number"] {
-    width: 100%;
-  }
-
-  button {
-    width: 100%;
-    box-sizing: border-box;
-  }
+input[type="number"]:invalid {
+  border: 2px solid red;
 }
 
-.scorecard-logo {
-  max-width: 150px;
-  margin-bottom: 10px;
+/* Banner längst ner */
+.banner {
+  background-color: #f1f1f1;
+  padding: 15px;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
 }
