@@ -21,6 +21,10 @@ function goToPlayerCount() {
 
 function goToPlayerNames() {
   const count = parseInt(document.getElementById('player-count').value);
+  if (isNaN(count) || count < 1 || count > 6) {
+    alert("Välj ett antal spelare mellan 1 och 6.");
+    return;
+  }
   players = new Array(count).fill("");
   showPage('player-names-page');
   generatePlayerInputs();
