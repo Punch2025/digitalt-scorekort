@@ -154,3 +154,4 @@ function removePlayer() {
   renderScorecard();
 }
 
+renderTeamInput();
