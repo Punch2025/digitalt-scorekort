@@ -1,162 +1,183 @@
-let teamName = '';
-let playerCount = 1;
+let teamName = "";
+let playerCount = 0;
 let playerNames = [];
 let scores = [];
 
-const app = document.getElementById('app');
-
-function renderTeamInput() {
-  app.innerHTML = `
-    <div class="container">
-      <img src="logo.png" alt="Punch Restaurang & Minigolf" class="logo" />
-      <h1>Välkommen till Punch Restaurang & Minigolf</h1>
-      <input type="text" id="team-name" placeholder="Ange lagnamn" />
-      <button onclick="submitTeamName()">Fortsätt</button>
-    </div>
-  `;
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
 }
 
-function submitTeamName() {
-  const input = document.getElementById('team-name');
-  teamName = input.value.trim();
-  if (!teamName) {
-    alert('Ange ett lagnamn för att fortsätta.');
+function goToPlayerCount() {
+  teamName = document.getElementById('team-name').value.trim();
+  if (teamName === "") {
+    alert("Fyll i ett lagnamn för att fortsätta.");
     return;
   }
-  renderPlayerCount();
+  showPage('player-count-page');
 }
 
-function renderPlayerCount() {
-  app.innerHTML = `
-    <div class="container">
-      <img src="logo.png" alt="Punch Restaurang & Minigolf" class="logo" />
-      <h2>Hur många spelar?</h2>
-      <input type="number" id="player-count" min="1" max="6" value="1" />
-      <button onclick="submitPlayerCount()">Fortsätt</button>
-    </div>
-  `;
-}
-
-function submitPlayerCount() {
-  const input = document.getElementById('player-count');
-  const count = parseInt(input.value);
-  if (isNaN(count) || count < 1 || count > 6) {
-    alert('Ange ett giltigt antal spelare (1–6).');
+function goToPlayerNames() {
+  playerCount = parseInt(document.getElementById('player-count').value);
+  if (isNaN(playerCount) || playerCount < 1 || playerCount > 6) {
+    alert("Välj mellan 1 och 6 spelare.");
     return;
   }
-  playerCount = count;
-  renderPlayerNames();
-}
 
-function renderPlayerNames() {
-  playerNames = new Array(playerCount).fill('');
-  app.innerHTML = `
-    <div class="container">
-      <h2>Ange namn på spelarna</h2>
-      ${playerNames.map((_, i) => `
-        <input type="text" id="player-${i}" placeholder="Spelare ${i + 1}" /><br>
-      `).join('')}
-      <button onclick="startGame()">Starta Spel</button>
-    </div>
-  `;
+  const container = document.getElementById('player-names');
+  container.innerHTML = "";
+  for (let i = 0; i < playerCount; i++) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = `Spelare ${i + 1}`;
+    input.id = `player-${i}`;
+    container.appendChild(input);
+  }
+
+  showPage('player-names-page');
 }
 
 function startGame() {
-  playerNames = playerNames.map((_, i) => {
-    const nameInput = document.getElementById(`player-${i}`);
-    return nameInput.value.trim() || `Spelare ${i + 1}`;
-  });
+  playerNames = [];
+  scores = [];
 
-  scores = playerNames.map(() => new Array(12).fill(''));
-  renderScorecard();
+  for (let i = 0; i < playerCount; i++) {
+    const name = document.getElementById(`player-${i}`).value.trim();
+    if (name === "") {
+      alert("Fyll i alla spelarnamn.");
+      return;
+    }
+    playerNames.push(name);
+    scores.push(Array(12).fill(1));
+  }
+
+  generateScorecard();
+  showPage('scorecard-page');
 }
 
-function renderScorecard() {
-  app.innerHTML = `
-    <div class="container">
-      <h2>${teamName}</h2>
-      <div class="scorecard-wrapper">
-        <table class="scorecard">
-          <thead>
-            <tr>
-              <th>Spelare</th>
-              ${Array.from({ length: 12 }, (_, i) => `<th>Hål ${i + 1}</th>`).join('')}
-              <th>Totalt</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${playerNames.map((name, playerIndex) => `
-              <tr>
-                <td>${name}</td>
-                ${Array.from({ length: 12 }, (_, holeIndex) => `
-                  <td>
-                    <input type="number" min="1" max="9" value="${scores[playerIndex][holeIndex] || ''}" onchange="updateScore(${playerIndex}, ${holeIndex}, this)" />
-                  </td>
-                `).join('')}
-                <td id="player-total-${playerIndex}">0</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        <div class="team-total">
-          <strong>Lagresultat:</strong> <span id="team-total">0</span> slag
-        </div>
-        <div class="controls">
-          ${playerCount < 6 ? '<button onclick="addPlayer()">Lägg till spelare</button>' : ''}
-          ${playerCount > 1 ? '<button onclick="removePlayer()">Ta bort spelare</button>' : ''}
-        </div>
-        <div class="banner">
-          Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. <br>
-          Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!
-        </div>
-      </div>
-    </div>
-  `;
+function generateScorecard() {
+  const container = document.getElementById('scorecard-container');
+  container.innerHTML = "";
 
-  updateTotals();
-}
+  // Logotyp överst på scorekortet
+  const logoImg = document.createElement('img');
+  logoImg.src = "logo.png"; // Byt namn om din logga heter något annat
+  logoImg.alt = "Punch Restaurang & Minigolf Logga";
+  logoImg.className = "scorecard-logo";
+  container.appendChild(logoImg);
 
-function updateScore(playerIndex, holeIndex, input) {
-  let value = parseInt(input.value);
-  if (value > 9) {
-    alert('Högst 9 slag per hål, har du mer än så bör du träna lite..');
-    input.value = '';
-    return;
+  const table = document.createElement('table');
+  table.className = 'scorecard vertical-scorecard';
+
+  const headerRow = document.createElement('tr');
+  const nameHeader = document.createElement('th');
+  nameHeader.textContent = "Hål";
+  headerRow.appendChild(nameHeader);
+
+  for (let i = 0; i < playerCount; i++) {
+    const th = document.createElement('th');
+    th.textContent = playerNames[i];
+    headerRow.appendChild(th);
   }
-  if (value < 1 || isNaN(value)) {
-    input.value = '';
-    return;
+
+  const teamCol = document.createElement('th');
+  teamCol.textContent = teamName;
+  headerRow.appendChild(teamCol);
+  table.appendChild(headerRow);
+
+  for (let hole = 0; hole < 12; hole++) {
+    const row = document.createElement('tr');
+    const holeNumber = document.createElement('td');
+    holeNumber.textContent = `Hål ${hole + 1}`;
+    row.appendChild(holeNumber);
+
+    let teamTotalForHole = 0;
+
+    for (let player = 0; player < playerCount; player++) {
+      const td = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = 1;
+      input.max = 9;
+      input.value = 1;
+      input.addEventListener('input', (e) => {
+        let val = parseInt(e.target.value);
+        if (isNaN(val) || val < 1) val = 1;
+        if (val > 9) {
+          alert("Högst 9 slag per hål, har du mer än så bör du träna lite..");
+          val = 9;
+        }
+        scores[player][hole] = val;
+        updateTotals();
+        e.target.value = val;
+      });
+      td.appendChild(input);
+      row.appendChild(td);
+      teamTotalForHole += 1;
+    }
+
+    const teamTotalCell = document.createElement('td');
+    teamTotalCell.textContent = teamTotalForHole;
+    row.appendChild(teamTotalCell);
+    table.appendChild(row);
   }
-  scores[playerIndex][holeIndex] = value;
+
+  const totalRow = document.createElement('tr');
+  const totalLabel = document.createElement('td');
+  totalLabel.textContent = "Slutresultat";
+  totalRow.appendChild(totalLabel);
+
+  let teamTotal = 0;
+  for (let player = 0; player < playerCount; player++) {
+    const td = document.createElement('td');
+    td.id = `total-${player}`;
+    td.textContent = 12;
+    totalRow.appendChild(td);
+    teamTotal += 12;
+  }
+
+  const teamTotalTd = document.createElement('td');
+  teamTotalTd.id = 'team-total';
+  teamTotalTd.textContent = teamTotal;
+  totalRow.appendChild(teamTotalTd);
+
+  table.appendChild(totalRow);
+  container.appendChild(table);
+
+  const controls = document.createElement('div');
+  controls.className = 'controls';
+
+  if (playerCount < 6) {
+    const addPlayerBtn = document.createElement('button');
+    addPlayerBtn.textContent = 'Lägg till spelare';
+    addPlayerBtn.onclick = () => alert("Funktionen för att lägga till spelare kommer snart!");
+    controls.appendChild(addPlayerBtn);
+  }
+
+  const removePlayerBtn = document.createElement('button');
+  removePlayerBtn.textContent = 'Ta bort spelare';
+  removePlayerBtn.onclick = () => alert("Funktionen för att ta bort spelare kommer snart!");
+  controls.appendChild(removePlayerBtn);
+
+  container.appendChild(controls);
+
+  const banner = document.createElement('div');
+  banner.className = 'banner';
+  banner.textContent = "Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!";
+  container.appendChild(banner);
+
   updateTotals();
 }
 
 function updateTotals() {
-  let teamTotal = 0;
-
-  playerNames.forEach((_, i) => {
-    const total = scores[i].reduce((sum, s) => sum + (parseInt(s) || 0), 0);
-    document.getElementById(`player-total-${i}`).innerText = total;
-    teamTotal += total;
-  });
-
-  document.getElementById('team-total').innerText = teamTotal;
+  let teamSum = 0;
+  for (let player = 0; player < playerCount; player++) {
+    const sum = scores[player].reduce((a, b) => a + b, 0);
+    document.getElementById(`total-${player}`).textContent = sum;
+    teamSum += sum;
+  }
+  document.getElementById('team-total').textContent = teamSum;
 }
 
-function addPlayer() {
-  if (playerCount >= 6) return;
-  playerNames.push(`Spelare ${playerCount + 1}`);
-  scores.push(new Array(12).fill(''));
-  playerCount++;
-  renderScorecard();
-}
-
-function removePlayer() {
-  if (playerCount <= 1) return;
-  playerNames.pop();
-  scores.pop();
-  playerCount--;
-  renderScorecard();
-}
-
-renderTeamInput();
+// Starta på första sidan
+showPage('start-page');
