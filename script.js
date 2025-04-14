@@ -14,6 +14,7 @@ function goToPlayerCount() {
     alert("Fyll i ett lagnamn för att fortsätta.");
     return;
   }
+  console.log("Byter till player-count-page");
   showPage('player-count-page');
 }
 
