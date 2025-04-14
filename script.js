@@ -75,39 +75,40 @@ function renderScorecard() {
   app.innerHTML = `
     <div class="container">
       <h2>${teamName}</h2>
-      <div class="scorecard-vertical">
-        ${Array.from({ length: 12 }, (_, hole) => `
-          <div class="hole-column">
-            <h3>Hål ${hole + 1}</h3>
-            ${playerNames.map((name, i) => `
-              <div class="score-input">
-                <label>${name}</label>
-                <input type="number" min="1" max="9" value="${scores[i][hole] || ''}"
-                  onchange="updateScore(${i}, ${hole}, this)" />
-              </div>
+      <div class="scorecard-wrapper">
+        <table class="scorecard">
+          <thead>
+            <tr>
+              <th>Spelare</th>
+              ${Array.from({ length: 12 }, (_, i) => `<th>Hål ${i + 1}</th>`).join('')}
+              <th>Totalt</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${playerNames.map((name, playerIndex) => `
+              <tr>
+                <td>${name}</td>
+                ${Array.from({ length: 12 }, (_, holeIndex) => `
+                  <td>
+                    <input type="number" min="1" max="9" value="${scores[playerIndex][holeIndex] || ''}" onchange="updateScore(${playerIndex}, ${holeIndex}, this)" />
+                  </td>
+                `).join('')}
+                <td id="player-total-${playerIndex}">0</td>
+              </tr>
             `).join('')}
-          </div>
-        `).join('')}
-      </div>
-
-      <div class="totals">
-        <h3>Slutresultat per spelare</h3>
-        ${playerNames.map((name, i) => `
-          <div class="total-line">
-            ${name}: <span id="player-total-${i}">0</span> slag
-          </div>
-        `).join('')}
-        <div class="total-line"><strong>Lagresultat:</strong> <span id="team-total">0</span> slag</div>
-      </div>
-
-      <div class="controls">
-        ${playerCount < 6 ? '<button onclick="addPlayer()">Lägg till spelare</button>' : ''}
-        ${playerCount > 1 ? '<button onclick="removePlayer()">Ta bort spelare</button>' : ''}
-      </div>
-
-      <div class="banner">
-        Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. <br>
-        Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!
+          </tbody>
+        </table>
+        <div class="team-total">
+          <strong>Lagresultat:</strong> <span id="team-total">0</span> slag
+        </div>
+        <div class="controls">
+          ${playerCount < 6 ? '<button onclick="addPlayer()">Lägg till spelare</button>' : ''}
+          ${playerCount > 1 ? '<button onclick="removePlayer()">Ta bort spelare</button>' : ''}
+        </div>
+        <div class="banner">
+          Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. <br>
+          Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!
+        </div>
       </div>
     </div>
   `;
@@ -158,8 +159,4 @@ function removePlayer() {
   renderScorecard();
 }
 
-renderTeamInput();
-
-
-// Starta applikationen
 renderTeamInput();
