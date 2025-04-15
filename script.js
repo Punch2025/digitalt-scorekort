@@ -16,7 +16,6 @@ function goToPlayerCount() {
     return;
   }
   teamName = input.value.trim();
-  // Spara lagets namn i localStorage
   localStorage.setItem('teamName', teamName);
   showPage('page2');
 }
@@ -28,7 +27,6 @@ function goToPlayerNames() {
     return;
   }
   players = new Array(count).fill("");
-  // Spara antal spelare i localStorage
   localStorage.setItem('numPlayers', count);
   showPage('page3');
   generatePlayerInputs();
@@ -47,8 +45,7 @@ function generatePlayerInputs() {
     input.value = localStorage.getItem(`player${index}`) || ''; // Återställ spelarnamn från localStorage
     input.oninput = () => {
       players[index] = input.value;
-      // Spara spelarnamn i localStorage
-      localStorage.setItem(`player${index}`, input.value);
+      localStorage.setItem(`player${index}`, input.value); // Spara spelarnamn i localStorage
     };
     container.appendChild(label);
     container.appendChild(document.createElement('br'));
@@ -109,8 +106,7 @@ function generateScorecard() {
           return;
         }
         updateTeamTotal();
-        // Spara poängen i localStorage
-        localStorage.setItem(`hole${h}_player${pIndex}`, input.value);
+        localStorage.setItem(`hole${h}_player${pIndex}`, input.value); // Spara poängen i localStorage
       };
       cell.appendChild(input);
       row.appendChild(cell);
@@ -209,13 +205,9 @@ window.onload = function () {
   }
 
   // Ladda sidan baserat på vilket sid-id vi var på innan uppdateringen
-  if (localStorage.getItem('currentPage')) {
-    showPage(localStorage.getItem('currentPage'));
-  } else {
-    showPage('page1');
-  }
+  const lastPage = localStorage.getItem('currentPage') || 'page1'; // Om inget sparats, gå till 'page1'
+  showPage(lastPage);
 
-  // Återställ sidan med lagdata från localStorage
   if (btn1) btn1.addEventListener("click", goToPlayerCount);
   if (btn2) btn2.addEventListener("click", goToPlayerNames);
   if (btn3) btn3.addEventListener("click", startGame);
