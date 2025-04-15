@@ -44,6 +44,7 @@ function generatePlayerInputs() {
     const input = document.createElement('input');
     input.type = 'text';
     input.placeholder = "Ange namn";
+    input.value = localStorage.getItem(`player${index}`) || ''; // Återställ spelarnamn från localStorage
     input.oninput = () => {
       players[index] = input.value;
       // Spara spelarnamn i localStorage
@@ -100,6 +101,7 @@ function generateScorecard() {
       input.min = '1';
       input.max = '9';
       input.placeholder = '-';
+      input.value = localStorage.getItem(`hole${h}_player${pIndex}`) || ''; // Återställ poäng från localStorage
       input.oninput = () => {
         if (parseInt(input.value) > 9) {
           alert("Högst 9 slag per hål, har du mer än så bör du träna lite..");
@@ -107,6 +109,8 @@ function generateScorecard() {
           return;
         }
         updateTeamTotal();
+        // Spara poängen i localStorage
+        localStorage.setItem(`hole${h}_player${pIndex}`, input.value);
       };
       cell.appendChild(input);
       row.appendChild(cell);
@@ -181,6 +185,7 @@ window.onload = function () {
   // Ladda data från localStorage om den finns
   if (localStorage.getItem('teamName')) {
     teamName = localStorage.getItem('teamName');
+    document.getElementById('teamName').value = teamName;
   }
   if (localStorage.getItem('numPlayers')) {
     const count = localStorage.getItem('numPlayers');
@@ -193,8 +198,30 @@ window.onload = function () {
     }
   });
 
+  // Återställ poäng för alla hål och spelare
+  for (let h = 1; h <= holes; h++) {
+    players.forEach((_, pIndex) => {
+      const input = document.querySelector(`.scorecard tr:nth-child(${h + 1}) td:nth-child(${pIndex + 2}) input`);
+      if (input && localStorage.getItem(`hole${h}_player${pIndex}`)) {
+        input.value = localStorage.getItem(`hole${h}_player${pIndex}`);
+      }
+    });
+  }
+
+  // Ladda sidan baserat på vilket sid-id vi var på innan uppdateringen
+  if (localStorage.getItem('currentPage')) {
+    showPage(localStorage.getItem('currentPage'));
+  } else {
+    showPage('page1');
+  }
+
   // Återställ sidan med lagdata från localStorage
   if (btn1) btn1.addEventListener("click", goToPlayerCount);
   if (btn2) btn2.addEventListener("click", goToPlayerNames);
   if (btn3) btn3.addEventListener("click", startGame);
+};
+
+// Spara vilken sida vi var på innan uppdatering
+window.onbeforeunload = function () {
+  localStorage.setItem('currentPage', document.querySelector('.page:visible').id);
 };
