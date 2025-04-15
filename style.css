@@ -1,65 +1,68 @@
 body {
-  margin: 0;
-  font-family: "American Typewriter", serif;
-  background-color: white;
-  color: black;
+  font-family: "American Typewriter", sans-serif;
+  margin: 20px;
+  background-color: #f1f8f4;
+  color: #333;
   text-align: center;
-  padding: 20px;
 }
 
 .logo {
-  max-width: 120px;
-  height: auto;
-}
-
-.center-logo {
+  width: 120px;
+  margin: 20px auto;
   display: block;
-  margin: 0 auto 20px auto;
-}
-
-input, select, button {
-  margin: 10px;
-  padding: 8px;
-  font-size: 16px;
-}
-
-button {
-  cursor: pointer;
 }
 
 .page {
-  display: none;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-#scorecard-container {
-  overflow-x: auto;
-  margin-top: 20px;
+input[type="text"], input[type="number"] {
+  width: 80%;
+  padding: 10px;
+  margin: 10px auto;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  display: block;
+}
+
+button {
+  background-color: #009966;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #007a52;
 }
 
 .scorecard {
-  border-collapse: collapse;
-  margin: 0 auto;
   width: 100%;
-  max-width: 500px;
-  table-layout: fixed;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.scorecard th,
-.scorecard td {
-  border: 1px solid #000;
+.scorecard th, .scorecard td {
+  border: 1px solid #ccc;
   padding: 8px;
   font-size: 14px;
 }
 
-.scorecard input {
-  width: 100%;
-  text-align: center;
-  font-size: 16px;
+.scorecard th {
+  background-color: #e6f7ef;
 }
 
-.banner {
-  margin-top: 40px;
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-top: 2px solid #000;
+.scorecard input {
+  width: 50px;
+  text-align: center;
 }
