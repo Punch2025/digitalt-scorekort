@@ -27,7 +27,7 @@ function goToPlayerNames() {
     return;
   }
   players = new Array(count).fill("");
-  localStorage.setItem('numPlayers', count);
+  localStorage.setItem('players', JSON.stringify(players));
   showPage('page3');
   generatePlayerInputs();
 }
@@ -42,7 +42,7 @@ function generatePlayerInputs() {
     const input = document.createElement('input');
     input.type = 'text';
     input.placeholder = "Ange namn";
-    input.value = players[index] || "";
+    input.value = players[index];
     input.oninput = () => {
       players[index] = input.value;
       localStorage.setItem('players', JSON.stringify(players));
@@ -55,9 +55,9 @@ function generatePlayerInputs() {
 }
 
 function startGame() {
-  localStorage.setItem('players', JSON.stringify(players));
   showPage('scorecard-page');
   generateScorecard();
+  localStorage.setItem('currentPage', 'scorecard-page');
 }
 
 function generateScorecard() {
@@ -84,8 +84,6 @@ function generateScorecard() {
 
   table.appendChild(headerRow);
 
-  const savedScores = JSON.parse(localStorage.getItem('scores')) || [];
-
   for (let h = 1; h <= holes; h++) {
     const row = document.createElement('tr');
     const holeCell = document.createElement('td');
@@ -99,26 +97,25 @@ function generateScorecard() {
       input.min = '1';
       input.max = '9';
       input.placeholder = '-';
-      const saved = savedScores[h - 1]?.[pIndex];
-      if (saved !== undefined) input.value = saved;
-
+      input.dataset.hole = h;
+      input.dataset.player = pIndex;
+      input.value = getSavedScore(h, pIndex);
       input.oninput = () => {
         if (parseInt(input.value) > 9) {
           alert("Högst 9 slag per hål, har du mer än så bör du träna lite..");
           input.value = '';
           return;
         }
-        saveScores();
+        saveScore(h, pIndex, input.value);
         updateTeamTotal();
       };
-
       cell.appendChild(input);
       row.appendChild(cell);
     });
 
     const totalCell = document.createElement('td');
     totalCell.className = 'hole-total';
-    totalCell.textContent = calculateHoleTotal(h - 1);
+    totalCell.textContent = '0';
     row.appendChild(totalCell);
 
     table.appendChild(row);
@@ -132,79 +129,90 @@ function generateScorecard() {
   players.forEach((_, index) => {
     const cell = document.createElement('td');
     cell.id = `player-total-${index}`;
-    cell.textContent = calculatePlayerTotal(index);
+    cell.textContent = '0';
     totalRow.appendChild(cell);
   });
 
   const teamTotalCell = document.createElement('td');
   teamTotalCell.id = 'team-total';
-  teamTotalCell.textContent = calculateTeamTotal();
+  teamTotalCell.textContent = '0';
   totalRow.appendChild(teamTotalCell);
 
   table.appendChild(totalRow);
   container.appendChild(table);
-}
 
-function saveScores() {
-  const scores = [];
+  // 🔽 Banner och ny runda-knapp
+  const banner = document.createElement('div');
+  banner.className = 'scorecard-banner';
+  banner.innerHTML = `
+    <p>Hungrig? Ring oss för att boka bord eller beställa take away pizza!</p>
+    <a href="tel:03533455" class="call-button">Ring</a>
+  `;
+  container.appendChild(banner);
 
-  for (let h = 0; h < holes; h++) {
-    const row = [];
-    players.forEach((_, pIndex) => {
-      const input = document.querySelectorAll('.scorecard tr')[h + 1].querySelectorAll('td')[pIndex + 1].querySelector('input');
-      row.push(input.value ? parseInt(input.value) : null);
-    });
-    scores.push(row);
-  }
+  const restartButton = document.createElement('button');
+  restartButton.textContent = 'Ny runda';
+  restartButton.className = 'restart-button';
+  restartButton.onclick = () => {
+    if (confirm('Är du säker på vi ska börja om?')) {
+      localStorage.clear();
+      location.reload();
+    }
+  };
+  container.appendChild(restartButton);
 
-  localStorage.setItem('scores', JSON.stringify(scores));
+  updateTeamTotal();
 }
 
 function updateTeamTotal() {
-  const scores = JSON.parse(localStorage.getItem('scores')) || [];
-
-  // Per spelare
-  players.forEach((_, pIndex) => {
-    let total = 0;
-    for (let h = 0; h < holes; h++) {
-      if (scores[h] && scores[h][pIndex] != null) total += scores[h][pIndex];
-    }
-    const el = document.getElementById(`player-total-${pIndex}`);
-    if (el) el.textContent = total;
-  });
-
-  // Per hål
-  const table = document.querySelector('.scorecard');
-  for (let h = 0; h < holes; h++) {
-    let holeTotal = 0;
+  let teamTotal = 0;
+  for (let h = 1; h <= holes; h++) {
+    let holeSum = 0;
     players.forEach((_, pIndex) => {
-      if (scores[h] && scores[h][pIndex] != null) holeTotal += scores[h][pIndex];
+      const input = document.querySelector(`input[data-hole='${h}'][data-player='${pIndex}']`);
+      if (input && input.value) holeSum += parseInt(input.value);
     });
-    const totalCell = table.rows[h + 1].querySelector('.hole-total');
-    if (totalCell) totalCell.textContent = holeTotal;
+    const totalCell = document.querySelectorAll('.hole-total')[h - 1];
+    totalCell.textContent = holeSum;
+    teamTotal += holeSum;
   }
 
-  // Totalt lag
-  document.getElementById('team-total').textContent = calculateTeamTotal();
+  players.forEach((_, pIndex) => {
+    let playerTotal = 0;
+    const inputs = document.querySelectorAll(`input[data-player='${pIndex}']`);
+    inputs.forEach(input => {
+      if (input.value) playerTotal += parseInt(input.value);
+    });
+    document.getElementById(`player-total-${pIndex}`).textContent = playerTotal;
+  });
+
+  document.getElementById('team-total').textContent = teamTotal;
 }
 
-function calculateTeamTotal() {
-  const scores = JSON.parse(localStorage.getItem('scores')) || [];
-  return scores.reduce((sum, row) => sum + row.reduce((rSum, val) => rSum + (val || 0), 0), 0);
+function saveScore(hole, player, value) {
+  const scoreData = JSON.parse(localStorage.getItem('scores') || '{}');
+  if (!scoreData[hole]) scoreData[hole] = {};
+  scoreData[hole][player] = value;
+  localStorage.setItem('scores', JSON.stringify(scoreData));
 }
 
-function calculatePlayerTotal(pIndex) {
-  const scores = JSON.parse(localStorage.getItem('scores')) || [];
-  return scores.reduce((sum, row) => sum + (row[pIndex] || 0), 0);
-}
-
-function calculateHoleTotal(hIndex) {
-  const scores = JSON.parse(localStorage.getItem('scores')) || [];
-  if (!scores[hIndex]) return 0;
-  return scores[hIndex].reduce((sum, val) => sum + (val || 0), 0);
+function getSavedScore(hole, player) {
+  const scoreData = JSON.parse(localStorage.getItem('scores') || '{}');
+  return scoreData[hole]?.[player] || '';
 }
 
 window.onload = function () {
+  const savedTeam = localStorage.getItem('teamName');
+  const savedPlayers = localStorage.getItem('players');
+  const savedPage = localStorage.getItem('currentPage');
+
+  if (savedTeam && savedPlayers && savedPage === 'scorecard-page') {
+    teamName = savedTeam;
+    players = JSON.parse(savedPlayers);
+    showPage('scorecard-page');
+    generateScorecard();
+  }
+
   const btn1 = document.getElementById("goToPage2");
   const btn2 = document.getElementById("goToPage3");
   const btn3 = document.getElementById("startGame");
@@ -212,16 +220,4 @@ window.onload = function () {
   if (btn1) btn1.addEventListener("click", goToPlayerCount);
   if (btn2) btn2.addEventListener("click", goToPlayerNames);
   if (btn3) btn3.addEventListener("click", startGame);
-
-  // Återställ från localStorage
-  const savedTeam = localStorage.getItem('teamName');
-  const savedPlayers = JSON.parse(localStorage.getItem('players') || "[]");
-
-  if (savedTeam && savedPlayers.length > 0) {
-    teamName = savedTeam;
-    players = savedPlayers;
-    showPage('scorecard-page');
-    generateScorecard();
-    updateTeamTotal();
-  }
 };
