@@ -10,29 +10,30 @@ function showPage(pageId) {
 }
 
 function goToPlayerCount() {
-  const input = document.getElementById('team-name');
+  const input = document.getElementById('teamName');
   if (!input.value.trim()) {
     alert("Ange ett lagnamn.");
     return;
   }
   teamName = input.value.trim();
-  showPage('player-count-page');
+  showPage('page2');
 }
 
 function goToPlayerNames() {
-  const count = parseInt(document.getElementById('player-count').value);
+  const count = parseInt(document.getElementById('numPlayers').value);
   if (isNaN(count) || count < 1 || count > 6) {
-    alert("Välj ett antal spelare mellan 1 och 6.");
+    alert("Ange ett giltigt antal spelare (1-6).");
     return;
   }
   players = new Array(count).fill("");
-  showPage('player-names-page');
+  showPage('page3');
   generatePlayerInputs();
 }
 
 function generatePlayerInputs() {
   const container = document.getElementById('player-names');
   container.innerHTML = "";
+
   players.forEach((_, index) => {
     const label = document.createElement('label');
     label.textContent = `Spelare ${index + 1}:`;
@@ -86,8 +87,6 @@ function generateScorecard() {
     holeCell.textContent = `Hål ${h}`;
     row.appendChild(holeCell);
 
-    let rowTotal = 0;
-
     players.forEach((_, pIndex) => {
       const cell = document.createElement('td');
       const input = document.createElement('input');
@@ -134,7 +133,6 @@ function generateScorecard() {
   totalRow.appendChild(teamTotalCell);
 
   table.appendChild(totalRow);
-
   container.appendChild(table);
 }
 
@@ -154,8 +152,13 @@ function updateTeamTotal() {
   document.getElementById('team-total').textContent = teamTotal;
 }
 
-// Lyssnar på knapparna och länkar funktionerna korrekt
-document.getElementById('goToPlayerCount').addEventListener('click', goToPlayerCount);
-document.getElementById('goToPlayerNames').addEventListener('click', goToPlayerNames);
-document.getElementById('startGame').addEventListener('click', startGame);
+// ⭐ Vänta tills sidan är laddad innan vi kopplar knapparna
+window.onload = function () {
+  const btn1 = document.getElementById("goToPage2");
+  const btn2 = document.getElementById("goToPage3");
+  const btn3 = document.getElementById("startGame");
 
+  if (btn1) btn1.addEventListener("click", goToPlayerCount);
+  if (btn2) btn2.addEventListener("click", goToPlayerNames);
+  if (btn3) btn3.addEventListener("click", startGame);
+};
