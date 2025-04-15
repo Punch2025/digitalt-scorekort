@@ -204,7 +204,7 @@ window.onload = function () {
     });
   }
 
-  // Ladda sidan baserat på vilket sid-id vi var på innan uppdateringen
+  // Kontrollera om vi är på en relevant sida och visa den, annars visa 'page1'
   const lastPage = localStorage.getItem('currentPage') || 'page1'; // Om inget sparats, gå till 'page1'
   showPage(lastPage);
 
