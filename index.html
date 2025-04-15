@@ -2,126 +2,43 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Digitalt Scorekort</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minigolf Scorekort</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
-  <style>
-    .ad-banner {
-      margin-top: 20px;
-      padding: 16px;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      text-align: center;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .ad-banner p {
-      margin: 0 0 12px;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .ad-banner button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .call-button {
-      background-color: #4CAF50;
-      color: white;
-      margin-right: 10px;
-    }
-
-    .reset-button {
-      background-color: #e53935;
-      color: white;
-    }
-
-    .reset-confirm {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: white;
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    .reset-confirm button {
-      margin: 8px;
-      padding: 8px 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .reset-confirm .yes {
-      background-color: #e53935;
-      color: white;
-    }
-
-    .reset-confirm .no {
-      background-color: #ccc;
-    }
-  </style>
 </head>
 <body>
-  <div id="app">
-    <!-- Start Page: Innehåll för att fylla i lagnamn, antal spelare och spelarnamn -->
-    <div id="page1" class="page">
-      <!-- Din gamla struktur för att fylla i lagnamn, antal spelare och spelarnamn här -->
-    </div>
 
-    <!-- Page2: Välj antal spelare, spelarnamn och gå vidare -->
-    <div id="page2" class="page">
-      <!-- Din gamla struktur för att välja antal spelare och spelares namn -->
-    </div>
+  <img src="logo.png" alt="Logotyp" class="logo center-logo" />
 
-    <!-- Page3: Scorecard Page -->
-    <div id="scorecard-page" class="page">
-      <div id="scorecard-container"></div>
-
-      <div class="ad-banner">
-        <p>Hungrig? Ring oss för att boka bord eller beställa take away pizza!</p>
-        <a href="tel:03533455">
-          <button class="call-button">Ring</button>
-        </a>
-        <button class="reset-button" onclick="showResetConfirm()">Ny runda</button>
-      </div>
-    </div>
+  <!-- Sida 1 -->
+  <div class="page" id="page1">
+    <h2>Välkommen till Punch Restaurang & Äventyrsgolf</h2>
+    <label for="teamName">Lagnamn:</label>
+    <input type="text" id="teamName" placeholder="Ange lagnamn" />
+    <button id="goToPage2">Gå vidare</button>
   </div>
 
-  <div id="reset-confirm" class="reset-confirm" style="display: none;">
-    <p>Är du säker på vi ska börja om?</p>
-    <button class="yes" onclick="resetAll()">Ja</button>
-    <button class="no" onclick="hideResetConfirm()">Nej</button>
+  <!-- Sida 2 -->
+  <div class="page" id="page2" style="display: none;">
+    <h2>Hur många spelar?</h2>
+    <label for="numPlayers">Välj antal spelare (1-6):</label>
+    <input type="number" id="numPlayers" min="1" max="6" />
+    <button id="goToPage3">Gå vidare</button>
   </div>
 
-  <script>
-    function showResetConfirm() {
-      document.getElementById('reset-confirm').style.display = 'block';
-    }
+  <!-- Sida 3 -->
+  <div class="page" id="page3" style="display: none;">
+    <h2>Fyll i spelarnamn</h2>
+    <div id="player-names"></div>
+    <button id="startGame">Starta Spel</button>
+  </div>
 
-    function hideResetConfirm() {
-      document.getElementById('reset-confirm').style.display = 'none';
-    }
+  <!-- Scorekort -->
+  <div class="page" id="scorecard-page" style="display: none;">
+    <h2>Scorekort</h2>
+    <div id="scorecard-container"></div>
+  </div>
 
-    function resetAll() {
-      localStorage.clear();
-      location.reload();
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
