@@ -66,15 +66,3 @@ button:hover {
   width: 50px;
   text-align: center;
 }
-
-/* Lägger till nya stilar här för scorecard-container */
-#scorecard-container {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  width: auto; /* Anpassa bredden till innehållet */
-  max-width: 100%; /* Låt den växa i bredd om det behövs */
-  overflow: auto; /* Om innehållet är för brett, visa scrollbar eller justera */
-  display: inline-block; /* Detta gör så att den inte blir för stor och håller sig i storleken på innehållet */
-}
