@@ -149,6 +149,20 @@ function updateTeamTotal() {
     teamTotal += playerTotal;
   });
 
+  // Uppdatera lagets total för varje hål (kolumnen längst till höger i varje rad)
+  for (let h = 1; h <= holes; h++) {
+    let holeTotal = 0;
+    const row = document.querySelector(`.scorecard tr:nth-child(${h + 1})`);
+    if (row) {
+      const inputs = row.querySelectorAll('td input');
+      inputs.forEach(input => {
+        if (input.value) holeTotal += parseInt(input.value);
+      });
+      const teamCell = row.querySelector('.hole-total');
+      if (teamCell) teamCell.textContent = holeTotal;
+    }
+  }
+
   document.getElementById('team-total').textContent = teamTotal;
 }
 
