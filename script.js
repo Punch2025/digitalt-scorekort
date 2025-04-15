@@ -153,3 +153,9 @@ function updateTeamTotal() {
 
   document.getElementById('team-total').textContent = teamTotal;
 }
+
+// Lyssnar på knapparna och länkar funktionerna korrekt
+document.getElementById('goToPlayerCount').addEventListener('click', goToPlayerCount);
+document.getElementById('goToPlayerNames').addEventListener('click', goToPlayerNames);
+document.getElementById('startGame').addEventListener('click', startGame);
+
