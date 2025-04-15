@@ -4,33 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minigolf Scorekort</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Logotypen centrerad högst upp -->
-  <img src="logo.png" alt="Logotyp" class="logo center-logo" />
 
-  <!-- Första sidan (lagnamn) -->
+  <!-- Sida 1: Start -->
   <div class="page" id="page1">
+    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
     <h2>Välkommen till Punch Restaurang & Minigolf</h2>
-    <label for="team-name">Lagnamn:</label>
-    <input type="text" id="team-name" placeholder="Ange lagnamn" />
-    <button id="goToPlayerCount">Gå vidare</button>
+    <label for="teamName">Lagnamn:</label>
+    <input type="text" id="teamName" placeholder="Ange lagnamn" />
+    <button id="goToPage2">Gå vidare</button>
   </div>
 
-  <!-- Andra sidan (antal spelare) -->
-  <div class="page" id="player-count-page" style="display: none;">
+  <!-- Sida 2: Antal spelare -->
+  <div class="page" id="page2" style="display: none;">
+    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
     <h2>Hur många spelar?</h2>
-    <label for="player-count">Välj antal spelare (1-6):</label>
-    <input type="number" id="player-count" min="1" max="6" />
-    <button id="goToPlayerNames">Gå vidare</button>
+    <label for="numPlayers">Välj antal spelare (1-6):</label>
+    <input type="number" id="numPlayers" min="1" max="6" />
+    <button id="goToPage3">Gå vidare</button>
   </div>
 
-  <!-- Tredje sidan (spelarnamn) -->
-  <div class="page" id="player-names-page" style="display: none;">
+  <!-- Sida 3: Spelarnamn -->
+  <div class="page" id="page3" style="display: none;">
+    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
     <h2>Fyll i spelarnamn</h2>
-    <div id="player-names"></div>
+    <div id="playerNameInputs"></div>
     <button id="startGame">Starta Spel</button>
+  </div>
+
+  <!-- Sida 4: Scorekort -->
+  <div class="page" id="scorecard-page" style="display: none;">
+    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
+    <div id="scorecard-container"></div>
+    <div class="buttons">
+      <button id="addPlayer">Lägg till spelare</button>
+      <button id="removePlayer">Ta bort spelare</button>
+    </div>
+    <div class="banner">
+      Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!
+    </div>
   </div>
 
   <script src="script.js"></script>
