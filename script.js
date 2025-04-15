@@ -206,11 +206,14 @@ window.onload = function () {
   const savedPlayers = localStorage.getItem('players');
   const savedPage = localStorage.getItem('currentPage');
 
+  // Kontrollera om det finns sparade data och gå till rätt sida
   if (savedTeam && savedPlayers && savedPage === 'scorecard-page') {
     teamName = savedTeam;
     players = JSON.parse(savedPlayers);
     showPage('scorecard-page');
     generateScorecard();
+  } else {
+    showPage('page1');
   }
 
   const btn1 = document.getElementById("goToPage2");
