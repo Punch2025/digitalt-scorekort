@@ -1,52 +1,42 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Minigolf Scorekort</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- Sida 1: Start -->
+  <img src="logo.png" alt="Logotyp" class="logo center-logo" />
+
+  <!-- Sida 1 -->
   <div class="page" id="page1">
-    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
     <h2>Välkommen till Punch Restaurang & Minigolf</h2>
     <label for="teamName">Lagnamn:</label>
     <input type="text" id="teamName" placeholder="Ange lagnamn" />
     <button id="goToPage2">Gå vidare</button>
   </div>
 
-  <!-- Sida 2: Antal spelare -->
+  <!-- Sida 2 -->
   <div class="page" id="page2" style="display: none;">
-    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
     <h2>Hur många spelar?</h2>
     <label for="numPlayers">Välj antal spelare (1-6):</label>
     <input type="number" id="numPlayers" min="1" max="6" />
     <button id="goToPage3">Gå vidare</button>
   </div>
 
-  <!-- Sida 3: Spelarnamn -->
+  <!-- Sida 3 -->
   <div class="page" id="page3" style="display: none;">
-    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
     <h2>Fyll i spelarnamn</h2>
-    <div id="playerNameInputs"></div>
+    <div id="player-names"></div>
     <button id="startGame">Starta Spel</button>
   </div>
 
-  <!-- Sida 4: Scorekort -->
+  <!-- Scorekort -->
   <div class="page" id="scorecard-page" style="display: none;">
-    <img src="logo.png" alt="Logotyp" class="logo center-logo" />
+    <h2>Scorekort</h2>
     <div id="scorecard-container"></div>
-    <div class="buttons">
-      <button id="addPlayer">Lägg till spelare</button>
-      <button id="removePlayer">Ta bort spelare</button>
-    </div>
-    <div class="banner">
-      Hungrig? Meddela vår hovmästare för att få ett bord i restaurangen. Är tiden knapp? Ring oss på 035-334 55 och beställ vår fantastiska pizza takeaway!
-    </div>
   </div>
 
   <script src="script.js"></script>
