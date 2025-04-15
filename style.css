@@ -71,7 +71,11 @@ button:hover {
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 100%;
-  display: inline-block; /* Låter den anpassa storleken efter innehållet */
+  width: auto;  /* Gör så att rutan anpassar sig efter innehållet */
+  max-width: 100%;  /* Gör att den inte blir större än skärmbredden */
+  min-height: 200px;  /* Sätt ett minimimått för att hantera mindre innehåll */
+  display: inline-block;  /* Tillåter rutan att växa efter innehållet */
   margin-top: 20px;
+  overflow: auto;  /* Om innehållet är för stort, visa en scrollbar */
 }
+
