@@ -7,6 +7,7 @@ function showPage(pageId) {
     page.style.display = 'none';
   });
   document.getElementById(pageId).style.display = 'block';
+  localStorage.setItem('currentPage', pageId); // Spara aktuell sida i localStorage
 }
 
 function goToPlayerCount() {
@@ -106,7 +107,7 @@ function generateScorecard() {
           return;
         }
         updateTeamTotal();
-        localStorage.setItem(`hole${h}_player${pIndex}`, input.value); // Spara poängen i localStorage
+        localStorage.setItem(`hole${h}_player${pIndex}`, input.value); // Spara poäng i localStorage
       };
       cell.appendChild(input);
       row.appendChild(cell);
