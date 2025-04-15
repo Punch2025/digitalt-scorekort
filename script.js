@@ -16,6 +16,8 @@ function goToPlayerCount() {
     return;
   }
   teamName = input.value.trim();
+  // Spara lagets namn i localStorage
+  localStorage.setItem('teamName', teamName);
   showPage('page2');
 }
 
@@ -26,6 +28,8 @@ function goToPlayerNames() {
     return;
   }
   players = new Array(count).fill("");
+  // Spara antal spelare i localStorage
+  localStorage.setItem('numPlayers', count);
   showPage('page3');
   generatePlayerInputs();
 }
@@ -42,6 +46,8 @@ function generatePlayerInputs() {
     input.placeholder = "Ange namn";
     input.oninput = () => {
       players[index] = input.value;
+      // Spara spelarnamn i localStorage
+      localStorage.setItem(`player${index}`, input.value);
     };
     container.appendChild(label);
     container.appendChild(document.createElement('br'));
@@ -172,6 +178,22 @@ window.onload = function () {
   const btn2 = document.getElementById("goToPage3");
   const btn3 = document.getElementById("startGame");
 
+  // Ladda data från localStorage om den finns
+  if (localStorage.getItem('teamName')) {
+    teamName = localStorage.getItem('teamName');
+  }
+  if (localStorage.getItem('numPlayers')) {
+    const count = localStorage.getItem('numPlayers');
+    players = new Array(count).fill("");
+  }
+
+  players.forEach((_, index) => {
+    if (localStorage.getItem(`player${index}`)) {
+      players[index] = localStorage.getItem(`player${index}`);
+    }
+  });
+
+  // Återställ sidan med lagdata från localStorage
   if (btn1) btn1.addEventListener("click", goToPlayerCount);
   if (btn2) btn2.addEventListener("click", goToPlayerNames);
   if (btn3) btn3.addEventListener("click", startGame);
